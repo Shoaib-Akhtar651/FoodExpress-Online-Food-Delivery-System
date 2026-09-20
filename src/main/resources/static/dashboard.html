@@ -1,0 +1,3172 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Dashboard - FoodExpress</title>
+
+    <link rel="stylesheet" href="/css/style.css">
+
+    <style>
+        
+        .restaurant-card,
+        .food-card {
+            width: 300px;
+            padding: 0;
+            border-radius: 16px;
+            background: #ffffff;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.10);
+            text-align: left;
+            overflow: hidden;
+            transition:
+                transform 0.2s ease,
+                box-shadow 0.2s ease;
+        }
+
+        .food-card:hover,
+        .restaurant-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 28px rgba(0, 0, 0, 0.14);
+        }
+
+        .restaurant-card {
+            padding: 20px;
+        }
+
+        .restaurant-card h3,
+        .food-card h3 {
+            margin: 0 0 10px;
+            color: #111827;
+        }
+
+        .restaurant-card p,
+        .food-card p {
+            margin: 0 0 9px;
+            color: #666;
+        }
+
+        .restaurant-card .btn,
+        .food-card .btn {
+            margin-top: 10px;
+        }
+
+
+        
+
+        .restaurant-container {
+            display: grid;
+            grid-template-columns: repeat(
+                auto-fit,
+                minmax(280px, 300px)
+            );
+            gap: 26px;
+            justify-content: center;
+            align-items: stretch;
+        }
+
+
+       
+
+        .restaurant-search-area {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            max-width: 850px;
+            margin: 0 auto 15px;
+        }
+
+        .restaurant-search-input {
+            flex: 1;
+            min-width: 280px;
+            padding: 13px 16px;
+            border: 1px solid #d6d6d6;
+            border-radius: 9px;
+            font-size: 16px;
+            outline: none;
+            transition:
+                border-color 0.2s ease,
+                box-shadow 0.2s ease;
+        }
+
+        .restaurant-search-input:focus {
+            border-color: #e63946;
+            box-shadow: 0 0 0 3px rgba(230, 57, 70, 0.10);
+        }
+
+        .restaurant-search-button,
+        .restaurant-clear-search {
+            padding: 13px 20px;
+            border: 0;
+            border-radius: 9px;
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: 600;
+            transition:
+                transform 0.2s ease,
+                opacity 0.2s ease;
+        }
+
+        .restaurant-search-button {
+            background: #e63946;
+            color: #ffffff;
+        }
+
+        .restaurant-clear-search {
+            background: #eeeeee;
+            color: #333333;
+        }
+
+        .restaurant-search-button:hover,
+        .restaurant-clear-search:hover {
+            transform: translateY(-1px);
+            opacity: 0.9;
+        }
+
+        .restaurant-result-count {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #666;
+            font-weight: 600;
+        }
+
+
+       
+
+        .feature-container.food-container {
+            display: grid;
+            grid-template-columns: repeat(
+                auto-fit,
+                minmax(280px, 300px)
+            );
+            gap: 26px;
+            justify-content: center;
+            align-items: stretch;
+        }
+
+
+        
+        .food-image {
+            width: 100%;
+            height: 220px;
+            display: block;
+            object-fit: cover;
+            object-position: center;
+            margin: 0;
+            background: #f4f1ed;
+            transition:
+                opacity 0.25s ease,
+                transform 0.25s ease;
+        }
+
+        .food-card:hover .food-image {
+            transform: scale(1.02);
+        }
+
+        .food-image.loading-image {
+            opacity: 0.55;
+        }
+
+
+        
+
+        .food-card > h3,
+        .food-card > p,
+        .food-card > button {
+            margin-left: 20px;
+            margin-right: 20px;
+        }
+
+        .food-card > h3 {
+            margin-top: 20px;
+        }
+
+        .food-card > button {
+            width: calc(100% - 40px);
+            margin-bottom: 20px;
+        }
+
+
+        
+
+        .food-price {
+            font-size: 20px;
+            font-weight: 700;
+            color: #e63946 !important;
+        }
+
+
+        
+
+        .food-search-area {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            margin: 0 auto 15px;
+            max-width: 850px;
+        }
+
+        .food-search-input {
+            flex: 1;
+            min-width: 240px;
+            padding: 12px 14px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            outline: none;
+        }
+
+        .food-search-input:focus {
+            border-color: #e63946;
+        }
+
+        .search-button,
+        .clear-search {
+            padding: 12px 18px;
+            border: 0;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .search-button {
+            background: #e63946;
+            color: #ffffff;
+        }
+
+        .clear-search {
+            background: #eeeeee;
+            color: #333333;
+        }
+
+        .food-result-count {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #666;
+            font-weight: 600;
+        }
+
+
+       
+        .address-section {
+            display: none;
+            padding: 50px 20px;
+            background: #fff;
+        }
+
+        .address-section.show-address {
+            display: block;
+        }
+
+        .address-box {
+            max-width: 700px;
+            margin: 0 auto;
+            background: #ffffff;
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.10);
+        }
+
+        .address-box h2 {
+            text-align: center;
+            margin-bottom: 10px;
+            color: #111827;
+        }
+
+        .address-description {
+            text-align: center;
+            color: #666;
+            margin-bottom: 25px;
+        }
+
+        .address-form {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 18px;
+        }
+
+        .address-form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .address-form-group.full-width {
+            grid-column: 1 / -1;
+        }
+
+        .address-form-group label {
+            margin-bottom: 7px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .address-form-group input {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 12px 14px;
+            border: 1px solid #d6d6d6;
+            border-radius: 8px;
+            font-size: 15px;
+            outline: none;
+            transition:
+                border-color 0.2s ease,
+                box-shadow 0.2s ease;
+        }
+
+        .address-form-group input:focus {
+            border-color: #e63946;
+            box-shadow: 0 0 0 3px rgba(230, 57, 70, 0.10);
+        }
+
+        .address-save-button {
+            grid-column: 1 / -1;
+            padding: 13px 20px;
+            border: 0;
+            border-radius: 8px;
+            background: #e63946;
+            color: #ffffff;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition:
+                transform 0.2s ease,
+                opacity 0.2s ease;
+        }
+
+        .address-save-button:hover {
+            transform: translateY(-1px);
+            opacity: 0.92;
+        }
+
+        .address-save-button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .address-message {
+            display: none;
+            margin-top: 15px;
+            padding: 12px;
+            border-radius: 8px;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        .address-message.success {
+            display: block;
+            background: #e8f7ee;
+            color: #18794e;
+        }
+
+        .address-message.error {
+            display: block;
+            background: #fdecec;
+            color: #c00000;
+        }
+
+
+        .loading {
+            text-align: center;
+            font-size: 18px;
+            color: #666;
+        }
+
+        .error-message {
+            color: #c00000;
+            text-align: center;
+        }
+
+
+
+        @media (max-width: 700px) {
+
+            .restaurant-card,
+            .food-card {
+                width: min(100%, 340px);
+            }
+
+            .restaurant-container,
+            .feature-container.food-container {
+                grid-template-columns: minmax(0, 340px);
+            }
+
+            .food-image {
+                height: 220px;
+            }
+
+            .restaurant-search-input {
+                min-width: 240px;
+                width: 100%;
+            }
+
+            .restaurant-search-button,
+            .restaurant-clear-search {
+                flex: 1;
+                min-width: 110px;
+            }
+
+            .address-form {
+                grid-template-columns: 1fr;
+            }
+
+            .address-form-group.full-width {
+                grid-column: auto;
+            }
+
+            .address-save-button {
+                grid-column: auto;
+            }
+
+            .address-box {
+                padding: 22px;
+            }
+        }
+    </style>
+</head>
+
+
+<body>
+
+
+  
+
+    <header class="navbar">
+
+        <div class="logo">
+            FoodExpress
+        </div>
+
+        <nav class="nav-links">
+
+            <a href="/dashboard.html">
+                Home
+            </a>
+
+            <a href="#restaurants">
+                Restaurants
+            </a>
+
+            <a href="#food">
+                Food
+            </a>
+
+            <a href="/cart.html">
+                Cart
+            </a>
+
+            <a href="/order.html">
+                Orders
+            </a>
+
+            <a href="/payment.html">
+                Payment
+            </a>
+
+            <a href="#change-address"
+               onclick="showAddressForm(); return false;">
+                Change Address
+            </a>
+
+            <a href="#"
+               onclick="logout(); return false;">
+                Logout
+            </a>
+
+        </nav>
+
+    </header>
+
+
+   
+
+    <section class="hero">
+
+        <div class="hero-content">
+
+            <h1>
+                Welcome,
+                <span id="userName">
+                    User
+                </span>!
+            </h1>
+
+            <p>
+                What would you like to eat today?
+            </p>
+
+            <div class="hero-buttons">
+
+                <a href="#restaurants"
+                   class="btn btn-primary">
+                    Explore Restaurants
+                </a>
+
+                <a href="#food"
+                   class="btn btn-secondary">
+                    Browse Food
+                </a>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+   
+
+    <section class="features">
+
+        <h2>
+            Quick Actions
+        </h2>
+
+        <div class="feature-container">
+
+
+            <div class="feature-card">
+
+                <h3>
+                    🍽️ Restaurants
+                </h3>
+
+                <p>
+                    Explore available restaurants.
+                </p>
+
+                <a href="#restaurants"
+                   class="btn btn-primary">
+                    View Restaurants
+                </a>
+
+            </div>
+
+
+            <div class="feature-card">
+
+                <h3>
+                    🍔 Food
+                </h3>
+
+                <p>
+                    Browse delicious food items.
+                </p>
+
+                <a href="#food"
+                   class="btn btn-primary">
+                    View Food
+                </a>
+
+            </div>
+
+
+            <div class="feature-card">
+
+                <h3>
+                    🛒 Cart
+                </h3>
+
+                <p>
+                    Manage your food cart.
+                </p>
+
+                <a href="/cart.html"
+                   class="btn btn-primary">
+                    View Cart
+                </a>
+
+            </div>
+
+
+            <div class="feature-card">
+
+                <h3>
+                    📦 Orders
+                </h3>
+
+                <p>
+                    View your orders.
+                </p>
+
+                <a href="/order.html"
+                   class="btn btn-primary">
+                    My Orders
+                </a>
+
+            </div>
+
+
+            <div class="feature-card">
+
+                <h3>
+                    📍 Address
+                </h3>
+
+                <p>
+                    Update your delivery address.
+                </p>
+
+                <a href="#change-address"
+                   class="btn btn-primary"
+                   onclick="showAddressForm(); return false;">
+                    Change Address
+                </a>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    
+
+    <section class="address-section"
+             id="change-address">
+
+        <div class="address-box">
+
+            <h2>
+                📍 Change Delivery Address
+            </h2>
+
+            <p class="address-description">
+                Update your latest delivery address for your orders.
+            </p>
+
+
+            <form class="address-form"
+                  id="addressForm"
+                  onsubmit="updateAddress(event)">
+
+
+                <div class="address-form-group full-width">
+
+                    <label for="street">
+                        Street / House Address
+                    </label>
+
+                    <input
+                        type="text"
+                        id="street"
+                        name="street"
+                        placeholder="Enter street or house address"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="address-form-group">
+
+                    <label for="city">
+                        City
+                    </label>
+
+                    <input
+                        type="text"
+                        id="city"
+                        name="city"
+                        placeholder="Enter city"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="address-form-group">
+
+                    <label for="state">
+                        State
+                    </label>
+
+                    <input
+                        type="text"
+                        id="state"
+                        name="state"
+                        placeholder="Enter state"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="address-form-group">
+
+                    <label for="pincode">
+                        Pincode
+                    </label>
+
+                    <input
+                        type="text"
+                        id="pincode"
+                        name="pincode"
+                        placeholder="Enter 6-digit pincode"
+                        maxlength="6"
+                        pattern="[0-9]{6}"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="address-form-group">
+
+                    <label for="landmark">
+                        Landmark
+                    </label>
+
+                    <input
+                        type="text"
+                        id="landmark"
+                        name="landmark"
+                        placeholder="Enter landmark"
+                    >
+
+                </div>
+
+
+                <button
+                    type="submit"
+                    class="address-save-button"
+                    id="addressSaveButton">
+
+                    Save Address
+
+                </button>
+
+            </form>
+
+
+            <div
+                id="addressMessage"
+                class="address-message">
+            </div>
+
+        </div>
+
+    </section>
+
+
+   
+
+    <section class="features"
+             id="restaurants">
+
+        <h2>
+            Available Restaurants
+        </h2>
+
+
+        <div class="restaurant-search-area">
+
+            <input
+                id="restaurantSearchInput"
+                class="restaurant-search-input"
+                type="text"
+                placeholder="🔎 Search restaurant... e.g. Biryani House, Spice Garden, Asansol"
+            >
+
+            <button
+                type="button"
+                class="restaurant-search-button"
+                onclick="searchRestaurants()">
+
+                Search
+
+            </button>
+
+            <button
+                type="button"
+                class="restaurant-clear-search"
+                onclick="clearRestaurantSearch()">
+
+                Clear
+
+            </button>
+
+        </div>
+
+
+        <div
+            id="restaurantResultCount"
+            class="restaurant-result-count">
+        </div>
+
+
+        <div
+            class="feature-container restaurant-container"
+            id="restaurantContainer">
+
+            <p class="loading">
+                Loading restaurants...
+            </p>
+
+        </div>
+
+    </section>
+
+
+    
+    <section class="features"
+             id="food">
+
+        <h2>
+            Food Items
+        </h2>
+
+
+        <div class="food-search-area">
+
+            <input
+                id="foodSearchInput"
+                class="food-search-input"
+                type="text"
+                placeholder="🔎 Search food... e.g. Biryani, Paneer, Chicken, Fish"
+            >
+
+            <button
+                type="button"
+                class="search-button"
+                onclick="searchFood()">
+
+                Search
+
+            </button>
+
+            <button
+                type="button"
+                class="clear-search"
+                onclick="clearFoodSearch()">
+
+                Clear
+
+            </button>
+
+        </div>
+
+
+        <div
+            id="foodResultCount"
+            class="food-result-count">
+        </div>
+
+
+        <div
+            class="feature-container food-container"
+            id="foodContainer">
+
+            <div class="feature-card">
+
+                <h3>
+                    🍔 Delicious Food
+                </h3>
+
+                <p>
+                    Select a restaurant to explore available food.
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    
+
+    <footer class="footer">
+
+        <p>
+            © 2026 FoodExpress. All Rights Reserved.
+        </p>
+
+    </footer>
+
+
+<script>
+
+"use strict";
+
+
+
+
+const token =
+    localStorage.getItem("token");
+
+const userId =
+    localStorage.getItem("userId");
+
+const userName =
+    localStorage.getItem("userName");
+
+
+if (!token || !userId) {
+
+    window.location.href =
+        "/login.html";
+
+}
+else if (userName) {
+
+    document
+        .getElementById("userName")
+        .textContent =
+        userName;
+
+}
+
+
+
+function logout() {
+
+    localStorage.removeItem("token");
+    localStorage.removeItem("userId");
+    localStorage.removeItem("userName");
+    localStorage.removeItem("userEmail");
+
+    window.location.href =
+        "/login.html";
+}
+
+
+
+let allRestaurants = [];
+
+let allFoods = [];
+
+let currentRestaurantId = null;
+
+
+const imageCache =
+    new Map();
+
+const imagePromises =
+    new Map();
+
+
+function normalizeFoodName(value) {
+
+    return String(value || "")
+        .toLowerCase()
+        .normalize("NFKD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .replace(/&/g, "and")
+        .replace(/[^a-z0-9]+/g, " ")
+        .trim()
+        .replace(/\s+/g, " ");
+}
+
+
+
+function foodSlug(foodName) {
+
+    return normalizeFoodName(foodName)
+        .replace(/\s+/g, "-");
+}
+
+
+function createSafeFoodImage(foodName) {
+
+    const canvas =
+        document.createElement("canvas");
+
+    canvas.width = 800;
+    canvas.height = 500;
+
+    const ctx =
+        canvas.getContext("2d");
+
+    const gradient =
+        ctx.createLinearGradient(
+            0,
+            0,
+            800,
+            500
+        );
+
+    gradient.addColorStop(
+        0,
+        "#fff4e8"
+    );
+
+    gradient.addColorStop(
+        1,
+        "#f4dfc7"
+    );
+
+    ctx.fillStyle =
+        gradient;
+
+    ctx.fillRect(
+        0,
+        0,
+        800,
+        500
+    );
+
+    ctx.fillStyle =
+        "#e63946";
+
+    ctx.font =
+        "bold 42px Arial";
+
+    ctx.textAlign =
+        "center";
+
+    ctx.fillText(
+        foodName || "Food",
+        400,
+        250
+    );
+
+    ctx.font =
+        "24px Arial";
+
+    ctx.fillStyle =
+        "#777";
+
+    ctx.fillText(
+        "FoodExpress",
+        400,
+        300
+    );
+
+    return canvas.toDataURL(
+        "image/jpeg",
+        0.88
+    );
+}
+
+
+
+function verifyImageUrl(
+    url,
+    timeoutMs = 9000
+) {
+
+    if (!url) {
+
+        return Promise.resolve(false);
+
+    }
+
+    return new Promise(
+        function(resolve) {
+
+            const img =
+                new Image();
+
+            let done = false;
+
+            const timer =
+                setTimeout(
+                    function() {
+
+                        if (done) {
+                            return;
+                        }
+
+                        done = true;
+
+                        img.src = "";
+
+                        resolve(false);
+
+                    },
+                    timeoutMs
+                );
+
+
+            img.onload =
+                function() {
+
+                    if (done) {
+                        return;
+                    }
+
+                    done = true;
+
+                    clearTimeout(timer);
+
+                    resolve(
+                        img.naturalWidth > 0 &&
+                        img.naturalHeight > 0
+                    );
+
+                };
+
+
+            img.onerror =
+                function() {
+
+                    if (done) {
+                        return;
+                    }
+
+                    done = true;
+
+                    clearTimeout(timer);
+
+                    resolve(false);
+
+                };
+
+
+            img.referrerPolicy =
+                "no-referrer";
+
+            img.src =
+                url;
+
+        }
+    );
+}
+
+
+
+async function getMealDbImage(foodName) {
+
+    const name =
+        String(foodName || "")
+            .trim();
+
+    if (!name) {
+
+        return null;
+
+    }
+
+    try {
+
+        const url =
+            "https://www.themealdb.com/api/json/v1/1/search.php?s=" +
+            encodeURIComponent(name);
+
+
+        const response =
+            await fetch(
+                url,
+                {
+                    cache: "force-cache"
+                }
+            );
+
+
+        if (!response.ok) {
+
+            return null;
+
+        }
+
+
+        const data =
+            await response.json();
+
+
+        const meals =
+            Array.isArray(data.meals)
+                ? data.meals
+                : [];
+
+
+        if (!meals.length) {
+
+            return null;
+
+        }
+
+
+        const wanted =
+            normalizeFoodName(name);
+
+
+        let selected =
+            meals.find(
+                function(meal) {
+
+                    return (
+                        meal &&
+                        meal.strMealThumb &&
+                        normalizeFoodName(
+                            meal.strMeal
+                        ) === wanted
+                    );
+
+                }
+            );
+
+
+        if (!selected) {
+
+            const wantedWords =
+                wanted
+                    .split(" ")
+                    .filter(
+                        function(word) {
+
+                            return word.length > 2;
+
+                        }
+                    );
+
+
+            let bestScore = 0;
+
+
+            for (
+                const meal of meals
+            ) {
+
+                if (
+                    !meal ||
+                    !meal.strMealThumb
+                ) {
+
+                    continue;
+
+                }
+
+
+                const mealName =
+                    normalizeFoodName(
+                        meal.strMeal
+                    );
+
+
+                let score = 0;
+
+
+                for (
+                    const word of wantedWords
+                ) {
+
+                    if (
+                        mealName.includes(word)
+                    ) {
+
+                        score++;
+
+                    }
+
+                }
+
+
+                if (
+                    score > bestScore
+                ) {
+
+                    bestScore =
+                        score;
+
+                    selected =
+                        meal;
+
+                }
+
+            }
+
+
+            if (
+                bestScore < 1
+            ) {
+
+                selected = null;
+
+            }
+
+        }
+
+
+        if (
+            !selected ||
+            !selected.strMealThumb
+        ) {
+
+            return null;
+
+        }
+
+
+        const candidates = [
+
+            selected.strMealThumb +
+                "/large",
+
+            selected.strMealThumb +
+                "/medium",
+
+            selected.strMealThumb
+
+        ];
+
+
+        for (
+            const candidate of candidates
+        ) {
+
+            const valid =
+                await verifyImageUrl(
+                    candidate
+                );
+
+
+            if (valid) {
+
+                return candidate;
+
+            }
+
+        }
+
+    }
+    catch (error) {
+
+        console.warn(
+            "MealDB image error:",
+            foodName,
+            error
+        );
+
+    }
+
+    return null;
+}
+
+
+
+
+async function getWikimediaImage(foodName) {
+
+    const name =
+        String(foodName || "")
+            .trim();
+
+
+    if (!name) {
+
+        return null;
+
+    }
+
+
+    try {
+
+        const url =
+            "https://commons.wikimedia.org/w/api.php" +
+            "?action=query" +
+            "&generator=search" +
+            "&gsrsearch=" +
+            encodeURIComponent(name) +
+            "&gsrnamespace=6" +
+            "&gsrlimit=10" +
+            "&prop=imageinfo" +
+            "&iiprop=url" +
+            "&iiurlwidth=1200" +
+            "&format=json" +
+            "&origin=*";
+
+
+        const response =
+            await fetch(
+                url,
+                {
+                    cache: "force-cache"
+                }
+            );
+
+
+        if (!response.ok) {
+
+            return null;
+
+        }
+
+
+        const data =
+            await response.json();
+
+
+        const pages =
+            data.query &&
+            data.query.pages
+                ? Object.values(
+                    data.query.pages
+                )
+                : [];
+
+
+        const wanted =
+            normalizeFoodName(name);
+
+
+        for (
+            const page of pages
+        ) {
+
+            const title =
+                String(
+                    page.title || ""
+                )
+                .replace(
+                    /^File:/i,
+                    ""
+                )
+                .replace(
+                    /\.[a-z0-9]{2,6}$/i,
+                    ""
+                )
+                .replace(
+                    /[_-]+/g,
+                    " "
+                );
+
+
+            if (
+                normalizeFoodName(title)
+                !== wanted
+            ) {
+
+                continue;
+
+            }
+
+
+            const info =
+                page.imageinfo &&
+                page.imageinfo[0];
+
+
+            if (!info) {
+
+                continue;
+
+            }
+
+
+            const candidates = [
+
+                info.thumburl,
+
+                info.url
+
+            ];
+
+
+            for (
+                const candidate of candidates
+            ) {
+
+                if (!candidate) {
+
+                    continue;
+
+                }
+
+
+                const valid =
+                    await verifyImageUrl(
+                        candidate
+                    );
+
+
+                if (valid) {
+
+                    return candidate;
+
+                }
+
+            }
+
+        }
+
+    }
+    catch (error) {
+
+        console.warn(
+            "Wikimedia error:",
+            foodName,
+            error
+        );
+
+    }
+
+    return null;
+}
+
+
+
+
+async function getFamilyFoodImage(foodName) {
+
+    const name =
+        normalizeFoodName(
+            foodName
+        );
+
+
+    let searchName =
+        foodName;
+
+
+    if (
+        name.includes("biryani")
+    ) {
+
+        searchName =
+            "biryani";
+
+    }
+    else if (
+        name.includes("dosa")
+    ) {
+
+        searchName =
+            "dosa";
+
+    }
+    else if (
+        name.includes("paneer")
+    ) {
+
+        searchName =
+            "paneer";
+
+    }
+    else if (
+        name.includes("chicken")
+    ) {
+
+        searchName =
+            "chicken";
+
+    }
+    else if (
+        name.includes("mutton")
+    ) {
+
+        searchName =
+            "mutton";
+
+    }
+    else if (
+        name.includes("fish")
+    ) {
+
+        searchName =
+            "fish";
+
+    }
+    else if (
+        name.includes("egg")
+    ) {
+
+        searchName =
+            "egg";
+
+    }
+    else if (
+        name.includes("noodle") ||
+        name.includes("chow mein")
+    ) {
+
+        searchName =
+            "noodles";
+
+    }
+    else if (
+        name.includes("rice") ||
+        name.includes("pulao")
+    ) {
+
+        searchName =
+            "rice";
+
+    }
+    else if (
+        name.includes("burger")
+    ) {
+
+        searchName =
+            "burger";
+
+    }
+    else if (
+        name.includes("pasta")
+    ) {
+
+        searchName =
+            "pasta";
+
+    }
+    else if (
+        name.includes("soup")
+    ) {
+
+        searchName =
+            "soup";
+
+    }
+    else {
+
+        searchName =
+            "vegetarian";
+
+    }
+
+
+    return await getMealDbImage(
+        searchName
+    );
+}
+
+
+
+async function getFoodImage(food) {
+
+    const foodName =
+        String(
+            food.name || "Food"
+        );
+
+
+    const key =
+        normalizeFoodName(
+            foodName
+        );
+
+
+    if (
+        imageCache.has(key)
+    ) {
+
+        return imageCache.get(key);
+
+    }
+
+
+    if (
+        imagePromises.has(key)
+    ) {
+
+        return imagePromises.get(key);
+
+    }
+
+
+    const promise =
+        (async function() {
+
+            if (
+                food.imageUrl
+            ) {
+
+                const localValid =
+                    await verifyImageUrl(
+                        food.imageUrl
+                    );
+
+
+                if (localValid) {
+
+                    imageCache.set(
+                        key,
+                        food.imageUrl
+                    );
+
+                    return food.imageUrl;
+
+                }
+
+            }
+
+
+            let url =
+                await getMealDbImage(
+                    foodName
+                );
+
+
+            if (url) {
+
+                imageCache.set(
+                    key,
+                    url
+                );
+
+                return url;
+
+            }
+
+
+            url =
+                await getWikimediaImage(
+                    foodName
+                );
+
+
+            if (url) {
+
+                imageCache.set(
+                    key,
+                    url
+                );
+
+                return url;
+
+            }
+
+
+            url =
+                await getFamilyFoodImage(
+                    foodName
+                );
+
+
+            if (url) {
+
+                imageCache.set(
+                    key,
+                    url
+                );
+
+                return url;
+
+            }
+
+
+            const fallback =
+                createSafeFoodImage(
+                    foodName
+                );
+
+
+            imageCache.set(
+                key,
+                fallback
+            );
+
+
+            return fallback;
+
+        })();
+
+
+    imagePromises.set(
+        key,
+        promise
+    );
+
+
+    try {
+
+        return await promise;
+
+    }
+    finally {
+
+        imagePromises.delete(
+            key
+        );
+
+    }
+
+}
+
+
+
+function setFoodImage(
+    image,
+    foodName,
+    url
+) {
+
+    if (!url) {
+
+        image.src =
+            createSafeFoodImage(
+                foodName
+            );
+
+        image.classList.remove(
+            "loading-image"
+        );
+
+        return;
+
+    }
+
+
+    image.src =
+        url;
+
+
+    image.onload =
+        function() {
+
+            image.classList.remove(
+                "loading-image"
+            );
+
+        };
+
+
+    image.onerror =
+        function() {
+
+            image.onerror = null;
+
+            image.src =
+                createSafeFoodImage(
+                    foodName
+                );
+
+            image.classList.remove(
+                "loading-image"
+            );
+
+        };
+
+}
+
+
+
+async function showAddressForm() {
+
+    const addressSection =
+        document.getElementById(
+            "change-address"
+        );
+
+
+    addressSection.classList.add(
+        "show-address"
+    );
+
+
+    await loadAddress();
+
+
+    addressSection.scrollIntoView({
+        behavior: "smooth",
+        block: "start"
+    });
+
+}
+
+
+
+function hideAddressForm() {
+
+    const addressSection =
+        document.getElementById(
+            "change-address"
+        );
+
+
+    addressSection.classList.remove(
+        "show-address"
+    );
+
+}
+
+
+
+async function loadAddress() {
+
+    try {
+
+        const response =
+            await fetch(
+                "/api/users/" +
+                encodeURIComponent(userId),
+                {
+                    method: "GET",
+                    headers: {
+                        "Authorization":
+                            "Bearer " + token
+                    }
+                }
+            );
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                "Unable to load user address"
+            );
+
+        }
+
+
+        const user =
+            await response.json();
+
+
+        if (
+            user &&
+            user.address
+        ) {
+
+            document.getElementById(
+                "street"
+            ).value =
+                user.address.street || "";
+
+
+            document.getElementById(
+                "city"
+            ).value =
+                user.address.city || "";
+
+
+            document.getElementById(
+                "state"
+            ).value =
+                user.address.state || "";
+
+
+            document.getElementById(
+                "pincode"
+            ).value =
+                user.address.pincode || "";
+
+
+            document.getElementById(
+                "landmark"
+            ).value =
+                user.address.landmark || "";
+
+        }
+        else {
+
+            document.getElementById(
+                "street"
+            ).value = "";
+
+            document.getElementById(
+                "city"
+            ).value = "";
+
+            document.getElementById(
+                "state"
+            ).value = "";
+
+            document.getElementById(
+                "pincode"
+            ).value = "";
+
+            document.getElementById(
+                "landmark"
+            ).value = "";
+
+        }
+
+    }
+    catch (error) {
+
+        console.error(
+            "Address loading error:",
+            error
+        );
+
+    }
+
+}
+
+
+
+
+async function updateAddress(event) {
+
+    event.preventDefault();
+
+
+    const button =
+        document.getElementById(
+            "addressSaveButton"
+        );
+
+
+    const message =
+        document.getElementById(
+            "addressMessage"
+        );
+
+
+    const address = {
+
+        street:
+            document.getElementById(
+                "street"
+            ).value.trim(),
+
+        city:
+            document.getElementById(
+                "city"
+            ).value.trim(),
+
+        state:
+            document.getElementById(
+                "state"
+            ).value.trim(),
+
+        pincode:
+            document.getElementById(
+                "pincode"
+            ).value.trim(),
+
+        landmark:
+            document.getElementById(
+                "landmark"
+            ).value.trim()
+
+    };
+
+
+    if (
+        !address.street ||
+        !address.city ||
+        !address.state ||
+        !address.pincode
+    ) {
+
+        message.className =
+            "address-message error";
+
+        message.textContent =
+            "Please fill all required address fields.";
+
+        return;
+
+    }
+
+
+    if (
+        !/^[0-9]{6}$/.test(
+            address.pincode
+        )
+    ) {
+
+        message.className =
+            "address-message error";
+
+        message.textContent =
+            "Please enter a valid 6-digit pincode.";
+
+        return;
+
+    }
+
+
+    button.disabled = true;
+
+    button.textContent =
+        "Saving...";
+
+
+    message.className =
+        "address-message";
+
+    message.textContent =
+        "";
+
+
+    try {
+
+        const response =
+            await fetch(
+                "/api/users/" +
+                encodeURIComponent(userId) +
+                "/address",
+                {
+                    method: "PUT",
+                    headers: {
+                        "Content-Type":
+                            "application/json",
+                        "Authorization":
+                            "Bearer " + token
+                    },
+                    body:
+                        JSON.stringify(address)
+                }
+            );
+
+
+        if (!response.ok) {
+
+            const errorText =
+                await response.text();
+
+
+            throw new Error(
+                errorText ||
+                "Unable to update address"
+            );
+
+        }
+
+
+       
+
+        hideAddressForm();
+
+
+        
+
+        message.className =
+            "address-message";
+
+        message.textContent =
+            "";
+
+
+        alert(
+            "Delivery address updated successfully!"
+        );
+
+
+    }
+    catch (error) {
+
+        console.error(
+            "Address update error:",
+            error
+        );
+
+
+        message.className =
+            "address-message error";
+
+        message.textContent =
+            "Unable to update address. Please try again.";
+
+    }
+    finally {
+
+        button.disabled = false;
+
+        button.textContent =
+            "Save Address";
+
+    }
+
+}
+
+
+
+async function loadRestaurants() {
+
+    const container =
+        document.getElementById(
+            "restaurantContainer"
+        );
+
+
+    try {
+
+        const response =
+            await fetch(
+                "/api/restaurants",
+                {
+                    method: "GET",
+                    headers: {
+                        "Authorization":
+                            "Bearer " + token
+                    }
+                }
+            );
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                "Unable to load restaurants"
+            );
+
+        }
+
+
+        const restaurants =
+            await response.json();
+
+
+        allRestaurants =
+            Array.isArray(restaurants)
+                ? restaurants
+                : [];
+
+
+        if (
+            !allRestaurants.length
+        ) {
+
+            container.innerHTML =
+                "<p>No restaurants available.</p>";
+
+
+            document
+                .getElementById(
+                    "restaurantResultCount"
+                )
+                .textContent = "";
+
+            return;
+
+        }
+
+
+        renderRestaurants(
+            allRestaurants
+        );
+
+    }
+    catch (error) {
+
+        console.error(
+            "Restaurant error:",
+            error
+        );
+
+
+        container.innerHTML =
+            '<p class="error-message">' +
+            'Unable to load restaurants.' +
+            '</p>';
+
+
+        document
+            .getElementById(
+                "restaurantResultCount"
+            )
+            .textContent = "";
+
+    }
+
+}
+
+
+
+function renderRestaurants(
+    restaurants
+) {
+
+    const container =
+        document.getElementById(
+            "restaurantContainer"
+        );
+
+
+    container.innerHTML = "";
+
+
+    const list =
+        Array.isArray(restaurants)
+            ? restaurants
+            : [];
+
+
+    const resultCount =
+        document.getElementById(
+            "restaurantResultCount"
+        );
+
+
+    if (list.length) {
+
+        resultCount.textContent =
+            list.length +
+            " restaurant(s) found";
+
+    }
+    else {
+
+        resultCount.textContent =
+            "No restaurants found";
+
+    }
+
+
+    if (!list.length) {
+
+        container.innerHTML =
+            '<p class="error-message">' +
+            'No restaurant matches your search.' +
+            '</p>';
+
+        return;
+
+    }
+
+
+    list.forEach(
+        function(restaurant) {
+
+            const card =
+                document.createElement(
+                    "div"
+                );
+
+
+            card.className =
+                "restaurant-card";
+
+
+            const heading =
+                document.createElement(
+                    "h3"
+                );
+
+
+            heading.textContent =
+                restaurant.name ||
+                "Restaurant";
+
+
+            const description =
+                document.createElement(
+                    "p"
+                );
+
+
+            description.textContent =
+                restaurant.description ||
+                "Great food and service";
+
+
+            const location =
+                document.createElement(
+                    "p"
+                );
+
+
+            const strong =
+                document.createElement(
+                    "strong"
+                );
+
+
+            strong.textContent =
+                "Location: ";
+
+
+            location.appendChild(
+                strong
+            );
+
+
+            const locationText =
+                document.createTextNode(
+                    restaurant.location ||
+                    restaurant.address ||
+                    "Available location"
+                );
+
+
+            location.appendChild(
+                locationText
+            );
+
+
+            const button =
+                document.createElement(
+                    "button"
+                );
+
+
+            button.className =
+                "btn btn-primary";
+
+
+            button.textContent =
+                "View Food";
+
+
+            button.addEventListener(
+                "click",
+                function() {
+
+                    loadFood(
+                        restaurant.id
+                    );
+
+                }
+            );
+
+
+            card.append(
+                heading,
+                description,
+                location,
+                button
+            );
+
+
+            container.appendChild(
+                card
+            );
+
+        }
+    );
+
+}
+
+
+function searchRestaurants() {
+
+    const input =
+        document.getElementById(
+            "restaurantSearchInput"
+        );
+
+
+    const searchText =
+        normalizeFoodName(
+            input.value
+        );
+
+
+    if (!searchText) {
+
+        renderRestaurants(
+            allRestaurants
+        );
+
+        return;
+
+    }
+
+
+    const words =
+        searchText
+            .split(" ")
+            .filter(Boolean);
+
+
+    const filtered =
+        allRestaurants.filter(
+            function(restaurant) {
+
+                const restaurantText =
+                    normalizeFoodName(
+                        (restaurant.name || "") +
+                        " " +
+                        (restaurant.description || "") +
+                        " " +
+                        (restaurant.location || "") +
+                        " " +
+                        (restaurant.address || "")
+                    );
+
+
+                return words.every(
+                    function(word) {
+
+                        return restaurantText.includes(
+                            word
+                        );
+
+                    }
+                );
+
+            }
+        );
+
+
+    renderRestaurants(
+        filtered
+    );
+
+}
+
+
+
+function clearRestaurantSearch() {
+
+    document
+        .getElementById(
+            "restaurantSearchInput"
+        )
+        .value = "";
+
+
+    renderRestaurants(
+        allRestaurants
+    );
+
+}
+
+
+
+document
+    .getElementById(
+        "restaurantSearchInput"
+    )
+    .addEventListener(
+        "keydown",
+        function(event) {
+
+            if (
+                event.key === "Enter"
+            ) {
+
+                searchRestaurants();
+
+            }
+
+        }
+    );
+
+
+
+async function loadFood(
+    restaurantId
+) {
+
+    const container =
+        document.getElementById(
+            "foodContainer"
+        );
+
+
+    currentRestaurantId =
+        restaurantId;
+
+
+    container.innerHTML =
+        '<p class="loading">' +
+        'Loading food items...' +
+        '</p>';
+
+
+    document
+        .getElementById("food")
+        .scrollIntoView({
+            behavior: "smooth"
+        });
+
+
+    try {
+
+        const response =
+            await fetch(
+                "/api/foods/restaurant/" +
+                encodeURIComponent(
+                    restaurantId
+                ),
+                {
+                    method: "GET",
+                    headers: {
+                        "Authorization":
+                            "Bearer " + token
+                    }
+                }
+            );
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                "Unable to load food"
+            );
+
+        }
+
+
+        allFoods =
+            await response.json();
+
+
+        renderFoods(
+            allFoods
+        );
+
+    }
+    catch (error) {
+
+        console.error(
+            "Food loading error:",
+            error
+        );
+
+
+        container.innerHTML =
+            '<p class="error-message">' +
+            'Unable to load food items.' +
+            '</p>';
+
+
+        document
+            .getElementById(
+                "foodResultCount"
+            )
+            .textContent = "";
+
+    }
+
+}
+
+
+
+function renderFoods(
+    foods
+) {
+
+    const container =
+        document.getElementById(
+            "foodContainer"
+        );
+
+
+    container.innerHTML = "";
+
+
+    const list =
+        Array.isArray(foods)
+            ? foods
+            : [];
+
+
+    document
+        .getElementById(
+            "foodResultCount"
+        )
+        .textContent =
+        list.length
+            ? `${list.length} food item(s)`
+            : "";
+
+
+    if (!list.length) {
+
+        container.innerHTML =
+            "<p>No food items found.</p>";
+
+        return;
+
+    }
+
+
+    list.forEach(
+        function(food) {
+
+            const card =
+                document.createElement(
+                    "div"
+                );
+
+
+            card.className =
+                "food-card";
+
+
+            const image =
+                document.createElement(
+                    "img"
+                );
+
+
+            image.className =
+                "food-image loading-image";
+
+
+            image.alt =
+                (food.name || "Food") +
+                " food photo";
+
+
+            image.loading =
+                "lazy";
+
+
+            image.decoding =
+                "async";
+
+
+            image.referrerPolicy =
+                "no-referrer";
+
+
+            image.src =
+                createSafeFoodImage(
+                    food.name
+                );
+
+
+            card.appendChild(
+                image
+            );
+
+
+            const heading =
+                document.createElement(
+                    "h3"
+                );
+
+
+            heading.textContent =
+                food.name ||
+                "Food Item";
+
+
+            const description =
+                document.createElement(
+                    "p"
+                );
+
+
+            description.textContent =
+                food.description ||
+                "Delicious food";
+
+
+            const price =
+                document.createElement(
+                    "p"
+                );
+
+
+            price.className =
+                "food-price";
+
+
+            price.textContent =
+                "₹" +
+                Number(
+                    food.price || 0
+                );
+
+
+            const button =
+                document.createElement(
+                    "button"
+                );
+
+
+            button.className =
+                "btn btn-primary";
+
+
+            button.textContent =
+                "🛒 Add to Cart";
+
+
+            button.disabled =
+                food.available === false;
+
+
+            button.addEventListener(
+                "click",
+                function() {
+
+                    addToCart(
+                        food.id,
+                        food.name ||
+                        "Food Item",
+                        Number(
+                            food.price || 0
+                        )
+                    );
+
+                }
+            );
+
+
+            card.append(
+                heading,
+                description,
+                price,
+                button
+            );
+
+
+            container.appendChild(
+                card
+            );
+
+
+            getFoodImage(food)
+                .then(
+                    function(url) {
+
+                        setFoodImage(
+                            image,
+                            food.name,
+                            url
+                        );
+
+                    }
+                )
+                .catch(
+                    function(error) {
+
+                        console.warn(
+                            "Food image error:",
+                            food.name,
+                            error
+                        );
+
+
+                        setFoodImage(
+                            image,
+                            food.name,
+                            null
+                        );
+
+                    }
+                );
+
+        }
+    );
+
+}
+
+
+
+
+function searchFood() {
+
+    const input =
+        document.getElementById(
+            "foodSearchInput"
+        );
+
+
+    const searchText =
+        normalizeFoodName(
+            input.value
+        );
+
+
+    if (!searchText) {
+
+        renderFoods(
+            allFoods
+        );
+
+        return;
+
+    }
+
+
+    const words =
+        searchText
+            .split(" ")
+            .filter(Boolean);
+
+
+    const filtered =
+        allFoods.filter(
+            function(food) {
+
+                const foodText =
+                    normalizeFoodName(
+                        (food.name || "") +
+                        " " +
+                        (food.description || "")
+                    );
+
+
+                return words.every(
+                    function(word) {
+
+                        return foodText.includes(
+                            word
+                        );
+
+                    }
+                );
+
+            }
+        );
+
+
+    renderFoods(
+        filtered
+    );
+
+}
+
+
+
+function clearFoodSearch() {
+
+    document
+        .getElementById(
+            "foodSearchInput"
+        )
+        .value = "";
+
+
+    renderFoods(
+        allFoods
+    );
+
+}
+
+
+
+
+document
+    .getElementById(
+        "foodSearchInput"
+    )
+    .addEventListener(
+        "keydown",
+        function(event) {
+
+            if (
+                event.key === "Enter"
+            ) {
+
+                searchFood();
+
+            }
+
+        }
+    );
+
+
+
+
+async function addToCart(
+    foodId,
+    foodName,
+    price
+) {
+
+    try {
+
+        const response =
+            await fetch(
+                "/api/carts/user/" +
+                encodeURIComponent(
+                    userId
+                ),
+                {
+                    method: "GET",
+                    headers: {
+                        "Authorization":
+                            "Bearer " + token
+                    }
+                }
+            );
+
+
+        let cart =
+            response.ok
+                ? await response.json()
+                : null;
+
+
+        if (
+            !cart ||
+            !cart.id
+        ) {
+
+            const newCart = {
+
+                userId: userId,
+
+                items: [
+
+                    {
+                        foodId: foodId,
+                        foodName: foodName,
+                        price:
+                            Number(price),
+                        quantity: 1
+                    }
+
+                ],
+
+                totalAmount:
+                    Number(price)
+
+            };
+
+
+            const createResponse =
+                await fetch(
+                    "/api/carts",
+                    {
+                        method: "POST",
+                        headers: {
+                            "Content-Type":
+                                "application/json",
+                            "Authorization":
+                                "Bearer " + token
+                        },
+                        body:
+                            JSON.stringify(
+                                newCart
+                            )
+                    }
+                );
+
+
+            if (
+                !createResponse.ok
+            ) {
+
+                throw new Error(
+                    await createResponse.text() ||
+                    "Unable to create cart"
+                );
+
+            }
+
+
+            alert(
+                foodName +
+                " added to cart successfully!"
+            );
+
+
+            return;
+
+        }
+
+
+        if (
+            !Array.isArray(
+                cart.items
+            )
+        ) {
+
+            cart.items = [];
+
+        }
+
+
+        const existing =
+            cart.items.find(
+                function(item) {
+
+                    return (
+                        item.foodId ===
+                        foodId
+                    );
+
+                }
+            );
+
+
+        if (existing) {
+
+            existing.quantity =
+                Number(
+                    existing.quantity || 0
+                ) + 1;
+
+        }
+        else {
+
+            cart.items.push({
+
+                foodId: foodId,
+
+                foodName: foodName,
+
+                price:
+                    Number(price),
+
+                quantity: 1
+
+            });
+
+        }
+
+
+        cart.totalAmount =
+            cart.items.reduce(
+                function(
+                    sum,
+                    item
+                ) {
+
+                    return (
+                        sum +
+                        Number(
+                            item.price || 0
+                        ) *
+                        Number(
+                            item.quantity || 0
+                        )
+                    );
+
+                },
+                0
+            );
+
+
+        const updateResponse =
+            await fetch(
+                "/api/carts/" +
+                encodeURIComponent(
+                    cart.id
+                ),
+                {
+                    method: "PUT",
+                    headers: {
+                        "Content-Type":
+                            "application/json",
+                        "Authorization":
+                            "Bearer " + token
+                    },
+                    body:
+                        JSON.stringify(
+                            cart
+                        )
+                }
+            );
+
+
+        if (
+            !updateResponse.ok
+        ) {
+
+            throw new Error(
+                await updateResponse.text() ||
+                "Unable to update cart"
+            );
+
+        }
+
+
+        alert(
+            foodName +
+            " added to cart successfully!"
+        );
+
+    }
+    catch (error) {
+
+        console.error(
+            "Cart error:",
+            error
+        );
+
+
+        alert(
+            "Unable to add food to cart."
+        );
+
+    }
+
+}
+
+
+
+loadRestaurants();
+
+</script>
+
+
+</body>
+</html>

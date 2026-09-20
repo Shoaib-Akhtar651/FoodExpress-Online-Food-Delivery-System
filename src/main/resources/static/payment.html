@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Payment - FoodExpress</title>
+
+    <link rel="stylesheet"
+          href="/css/style.css">
+
+    <style>
+
+        .payment-section {
+            padding: 60px 30px;
+            min-height: 600px;
+        }
+
+        .payment-container {
+            max-width: 650px;
+            margin: 0 auto;
+        }
+
+        .payment-title {
+            text-align: center;
+            margin-bottom: 35px;
+        }
+
+        .payment-card {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 3px 15px rgba(0, 0, 0, 0.08);
+        }
+
+        .payment-card h2 {
+            margin-bottom: 25px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+
+        .form-group select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            box-sizing: border-box;
+            font-size: 16px;
+        }
+
+        .payment-summary {
+            background: #f7f7f7;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+        }
+
+        .payment-summary p {
+            margin: 8px 0;
+        }
+
+        .payment-total {
+            font-size: 24px;
+            font-weight: bold;
+            margin-top: 15px;
+        }
+
+        .pay-btn {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 7px;
+            cursor: pointer;
+            font-size: 17px;
+            font-weight: bold;
+        }
+
+        .success-message {
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        .success-message h2 {
+            margin-bottom: 15px;
+        }
+
+        .no-payment {
+            text-align: center;
+            padding: 50px 20px;
+        }
+
+        .no-payment h2 {
+            margin-bottom: 15px;
+        }
+
+        .no-payment p {
+            margin-bottom: 25px;
+        }
+
+        .error-message {
+            color: red;
+            text-align: center;
+            margin-top: 15px;
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    
+
+    <header class="navbar">
+
+        <div class="logo">
+            FoodExpress
+        </div>
+
+        <nav class="nav-links">
+
+            <a href="/dashboard.html">
+                Home
+            </a>
+
+            <a href="/cart.html">
+                Cart
+            </a>
+
+            <a href="/order.html">
+                Orders
+            </a>
+
+            <a href="/payment.html">
+                Payment
+            </a>
+
+            <a href="#"
+               onclick="logout()">
+                Logout
+            </a>
+
+        </nav>
+
+    </header>
+
+
+   
+
+    <section class="payment-section">
+
+        <div class="payment-container">
+
+
+            <div class="payment-title">
+
+                <h1>
+                    💳 Payment
+                </h1>
+
+                <p>
+                    Complete your payment securely
+                </p>
+
+            </div>
+
+
+            <div id="paymentContainer">
+
+                <!-- Payment details will be loaded here -->
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+	
+
+    <footer class="footer">
+
+        <p>
+            © 2026 FoodExpress. All Rights Reserved.
+        </p>
+
+    </footer>
+
+
+
+    <script>
+
+
+       
+	
+
+        const token =
+            localStorage.getItem("token");
+
+        const userId =
+            localStorage.getItem("userId");
+
+
+        if (!token || !userId) {
+
+            window.location.href =
+                "/login.html";
+
+        }
+
+
+       
+		
+        function logout() {
+
+            localStorage.removeItem("token");
+            localStorage.removeItem("userId");
+            localStorage.removeItem("userName");
+            localStorage.removeItem("userEmail");
+
+            window.location.href =
+                "/login.html";
+
+        }
+
+
+      
+		
+        const paymentContainer =
+            document.getElementById(
+                "paymentContainer"
+            );
+
+
+			
+
+        const selectedOrderId =
+            localStorage.getItem(
+                "selectedOrderId"
+            );
+
+        const selectedAmount =
+            localStorage.getItem(
+                "selectedOrderAmount"
+            );
+
+
+    
+			
+
+        function showNoPendingPayment() {
+
+            paymentContainer.innerHTML = `
+
+                <div class="payment-card">
+
+                    <div class="no-payment">
+
+                        <h2>
+                            ✅ No Pending Payment
+                        </h2>
+
+                        <p>
+                            You don't have any pending payment.
+                        </p>
+
+                        <a
+                            href="/dashboard.html"
+                            class="btn btn-primary"
+                        >
+                            Order Food
+                        </a>
+
+                    </div>
+
+                </div>
+
+            `;
+
+        }
+
+
+       
+		
+
+        function showPaymentForm() {
+
+            paymentContainer.innerHTML = `
+
+                <div class="payment-card">
+
+                    <h2>
+                        Payment Details
+                    </h2>
+
+
+                    <div class="payment-summary">
+
+                        <p>
+
+                            <strong>
+                                Order ID:
+                            </strong>
+
+                            <span id="orderId">
+                                ${selectedOrderId}
+                            </span>
+
+                        </p>
+
+
+                        <p class="payment-total">
+
+                            Amount:
+                            ₹<span id="amount">
+                                ${selectedAmount}
+                            </span>
+
+                        </p>
+
+                    </div>
+
+
+                    <form id="paymentForm">
+
+
+                        <div class="form-group">
+
+                            <label for="paymentMethod">
+                                Payment Method
+                            </label>
+
+
+                            <select
+                                id="paymentMethod"
+                                required
+                            >
+
+                                <option value="">
+                                    Select Payment Method
+                                </option>
+
+                                <option value="COD">
+                                    Cash on Delivery
+                                </option>
+
+                                <option value="UPI">
+                                    UPI
+                                </option>
+
+                                <option value="CARD">
+                                    Credit / Debit Card
+                                </option>
+
+                                <option value="NET_BANKING">
+                                    Net Banking
+                                </option>
+
+                            </select>
+
+                        </div>
+
+
+                        <button
+                            type="submit"
+                            class="btn btn-primary pay-btn"
+                        >
+                            Make Payment
+                        </button>
+
+
+                        <div
+                            id="errorMessage"
+                            class="error-message"
+                        >
+                        </div>
+
+
+                    </form>
+
+                </div>
+
+            `;
+
+
+           
+			
+
+            document.getElementById(
+                "paymentForm"
+            ).addEventListener(
+                "submit",
+                processPayment
+            );
+
+        }
+
+
+       
+		
+
+        async function processPayment(event) {
+
+            event.preventDefault();
+
+
+            const errorMessage =
+                document.getElementById(
+                    "errorMessage"
+                );
+
+
+            errorMessage.innerText = "";
+
+
+            
+
+            const paymentMethod =
+                document.getElementById(
+                    "paymentMethod"
+                ).value;
+
+
+            if (!paymentMethod) {
+
+                errorMessage.innerText =
+                    "Please select a payment method.";
+
+                return;
+
+            }
+
+
+            
+
+            if (!selectedOrderId) {
+
+                errorMessage.innerText =
+                    "No order selected. Please place an order first.";
+
+                return;
+
+            }
+
+
+            
+
+            const amount =
+                Number(
+                    selectedAmount || 0
+                );
+
+
+            if (amount <= 0) {
+
+                errorMessage.innerText =
+                    "Invalid payment amount.";
+
+                return;
+
+            }
+
+
+           
+
+            const paymentData = {
+
+                orderId:
+                    selectedOrderId,
+
+                userId:
+                    userId,
+
+                amount:
+                    amount,
+
+                paymentMethod:
+                    paymentMethod,
+
+                paymentStatus:
+                    "SUCCESS"
+
+            };
+
+
+            try {
+
+
+                
+
+                const response =
+                    await fetch(
+                        "/api/payments",
+                        {
+                            method: "POST",
+
+                            headers: {
+
+                                "Content-Type":
+                                    "application/json",
+
+                                "Authorization":
+                                    "Bearer " + token
+
+                            },
+
+                            body:
+                                JSON.stringify(
+                                    paymentData
+                                )
+
+                        }
+                    );
+
+
+                if (!response.ok) {
+
+                    const errorText =
+                        await response.text();
+
+                    throw new Error(
+                        errorText ||
+                        "Payment failed"
+                    );
+
+                }
+
+
+                const payment =
+                    await response.json();
+
+
+             
+
+                paymentContainer.innerHTML = `
+
+                    <div class="payment-card">
+
+                        <div class="success-message">
+
+                            <h2>
+                                ✅ Payment Successful
+                            </h2>
+
+
+                            <p>
+                                Your payment has been
+                                processed successfully.
+                            </p>
+
+
+                            <p>
+
+                                <strong>
+                                    Payment ID:
+                                </strong>
+
+                                ${payment.id || "N/A"}
+
+                            </p>
+
+
+                            <p>
+
+                                <strong>
+                                    Order ID:
+                                </strong>
+
+                                ${selectedOrderId}
+
+                            </p>
+
+
+                            <p>
+
+                                <strong>
+                                    Amount:
+                                </strong>
+
+                                ₹${amount}
+
+                            </p>
+
+
+                            <p>
+
+                                <strong>
+                                    Payment Method:
+                                </strong>
+
+                                ${paymentMethod}
+
+                            </p>
+
+
+                            <br>
+
+
+                            <a
+                                href="/order.html"
+                                class="btn btn-primary"
+                            >
+                                View My Orders
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                `;
+
+
+              
+
+                localStorage.removeItem(
+                    "selectedOrderId"
+                );
+
+                localStorage.removeItem(
+                    "selectedOrderAmount"
+                );
+
+
+                console.log(
+                    "Payment successful. Pending payment information cleared."
+                );
+
+
+            } catch (error) {
+
+                errorMessage.innerText =
+                    "Payment failed. Please try again.";
+
+                console.error(
+                    "Payment error:",
+                    error
+                );
+
+            }
+
+        }
+
+
+       
+
+        if (
+            selectedOrderId &&
+            selectedAmount &&
+            Number(selectedAmount) > 0
+        ) {
+
+            showPaymentForm();
+
+        } else {
+
+            showNoPendingPayment();
+
+        }
+
+
+    </script>
+
+
+</body>
+
+</html>

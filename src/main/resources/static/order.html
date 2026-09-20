@@ -1,0 +1,1239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Orders - FoodExpress</title>
+
+    <link rel="stylesheet" href="/css/style.css">
+
+    <style>
+        .orders-section {
+            padding: 60px 30px;
+            min-height: 600px;
+        }
+
+        .orders-container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .orders-title {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .order-card {
+            background: white;
+            padding: 25px;
+            margin-bottom: 20px;
+            border-radius: 10px;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+        }
+
+        .order-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            gap: 15px;
+        }
+
+        .order-id {
+            font-weight: bold;
+            word-break: break-all;
+        }
+
+        .order-status {
+            padding: 7px 14px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: bold;
+            background: #eee;
+        }
+
+        .paid-status {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .pending-status {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .cancelled-status {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .order-details {
+            margin-bottom: 20px;
+        }
+
+        .order-details p {
+            margin: 7px 0;
+            color: #555;
+        }
+
+        .order-items {
+            border-top: 1px solid #eee;
+            padding-top: 15px;
+        }
+
+        .order-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            color: #555;
+        }
+
+        .order-total {
+            border-top: 1px solid #eee;
+            margin-top: 15px;
+            padding-top: 15px;
+            text-align: right;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .order-actions {
+            margin-top: 20px;
+            text-align: right;
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .pay-button,
+        .cancel-button {
+            display: inline-block;
+            padding: 12px 24px;
+            border-radius: 7px;
+            font-weight: bold;
+            cursor: pointer;
+            border: none;
+            font-size: 15px;
+        }
+
+        .pay-button {
+            text-decoration: none;
+        }
+
+        .cancel-button {
+            background: #dc3545;
+            color: white;
+        }
+
+        .cancel-button:hover {
+            background: #c82333;
+        }
+
+        .paid-message {
+            display: inline-block;
+            padding: 10px 18px;
+            border-radius: 7px;
+            background: #d4edda;
+            color: #155724;
+            font-weight: bold;
+        }
+
+        .cancelled-message {
+            display: inline-block;
+            padding: 10px 18px;
+            border-radius: 7px;
+            background: #f8d7da;
+            color: #721c24;
+            font-weight: bold;
+        }
+
+        .cancel-reason {
+            margin-top: 15px;
+            padding: 12px 15px;
+            background: #fff5f5;
+            border-left: 4px solid #dc3545;
+            border-radius: 5px;
+            color: #555;
+        }
+
+        .loading {
+            text-align: center;
+            font-size: 18px;
+            color: #666;
+        }
+
+        .error-message {
+            text-align: center;
+            color: red;
+            font-size: 17px;
+        }
+
+        .empty-orders {
+            background: white;
+            padding: 60px 20px;
+            text-align: center;
+            border-radius: 10px;
+        }
+
+      
+		
+        .cancel-modal {
+            display: none;
+            position: fixed;
+            z-index: 9999;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.55);
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .cancel-modal-content {
+            background: white;
+            width: 100%;
+            max-width: 500px;
+            border-radius: 12px;
+            padding: 30px;
+            box-sizing: border-box;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.2);
+        }
+
+        .cancel-modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .cancel-modal-header h2 {
+            margin: 0;
+        }
+
+        .close-modal {
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            color: #666;
+            line-height: 1;
+        }
+
+        .close-modal:hover {
+            color: #000;
+        }
+
+        .cancel-modal-description {
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        .reason-option {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 13px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 7px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .reason-option:hover {
+            background: #f8f8f8;
+            border-color: #aaa;
+        }
+
+        .reason-option input {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+
+        .reason-option label {
+            cursor: pointer;
+            flex: 1;
+        }
+
+        .modal-buttons {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 25px;
+        }
+
+        .modal-cancel-button,
+        .confirm-cancel-button {
+            padding: 11px 20px;
+            border-radius: 7px;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+            border: none;
+        }
+
+        .modal-cancel-button {
+            background: #eee;
+            color: #333;
+        }
+
+        .modal-cancel-button:hover {
+            background: #ddd;
+        }
+
+        .confirm-cancel-button {
+            background: #dc3545;
+            color: white;
+        }
+
+        .confirm-cancel-button:hover:not(:disabled) {
+            background: #c82333;
+        }
+
+        .confirm-cancel-button:disabled {
+            background: #aaa;
+            cursor: not-allowed;
+        }
+
+        .cancel-error {
+            display: none;
+            color: #dc3545;
+            margin-top: 15px;
+            font-weight: bold;
+        }
+
+        @media (max-width: 700px) {
+
+            .order-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .order-item {
+                flex-direction: column;
+                gap: 5px;
+            }
+
+            .order-actions {
+                justify-content: center;
+                text-align: center;
+            }
+
+            .pay-button,
+            .cancel-button {
+                width: 100%;
+            }
+
+            .cancel-modal-content {
+                padding: 22px;
+            }
+
+            .modal-buttons {
+                flex-direction: column;
+            }
+
+            .modal-cancel-button,
+            .confirm-cancel-button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header class="navbar">
+
+    <div class="logo">FoodExpress</div>
+
+    <nav class="nav-links">
+        <a href="/dashboard.html">Home</a>
+        <a href="/dashboard.html#restaurants">Restaurants</a>
+        <a href="/cart.html">Cart</a>
+        <a href="/order.html">Orders</a>
+        <a href="#" onclick="logout()">Logout</a>
+    </nav>
+
+</header>
+
+
+<section class="orders-section">
+
+    <div class="orders-container">
+
+        <div class="orders-title">
+            <h1>📦 My Orders</h1>
+            <p>View your previous orders</p>
+        </div>
+
+        <div id="ordersContainer">
+            <p class="loading">Loading your orders...</p>
+        </div>
+
+    </div>
+
+</section>
+
+
+<footer class="footer">
+    <p>© 2026 FoodExpress. All Rights Reserved.</p>
+</footer>
+
+
+
+
+
+<div id="cancelModal" class="cancel-modal">
+
+    <div class="cancel-modal-content">
+
+        <div class="cancel-modal-header">
+
+            <h2>Cancel Order</h2>
+
+            <span class="close-modal" onclick="closeCancelModal()">
+                &times;
+            </span>
+
+        </div>
+
+        <p class="cancel-modal-description">
+            Why do you want to cancel this order?
+        </p>
+
+
+        <div class="reason-option">
+
+            <input
+                type="radio"
+                name="cancelReason"
+                id="reason1"
+                value="Ordered by mistake"
+                onchange="enableConfirmButton()"
+            >
+
+            <label for="reason1">
+                Ordered by mistake
+            </label>
+
+        </div>
+
+
+        <div class="reason-option">
+
+            <input
+                type="radio"
+                name="cancelReason"
+                id="reason2"
+                value="Food delivery is taking too long"
+                onchange="enableConfirmButton()"
+            >
+
+            <label for="reason2">
+                Food delivery is taking too long
+            </label>
+
+        </div>
+
+
+        <div class="reason-option">
+
+            <input
+                type="radio"
+                name="cancelReason"
+                id="reason3"
+                value="Changed my mind"
+                onchange="enableConfirmButton()"
+            >
+
+            <label for="reason3">
+                Changed my mind
+            </label>
+
+        </div>
+
+
+        <div class="reason-option">
+
+            <input
+                type="radio"
+                name="cancelReason"
+                id="reason4"
+                value="Ordered from another restaurant"
+                onchange="enableConfirmButton()"
+            >
+
+            <label for="reason4">
+                Ordered from another restaurant
+            </label>
+
+        </div>
+
+
+        <div class="reason-option">
+
+            <input
+                type="radio"
+                name="cancelReason"
+                id="reason5"
+                value="Other reason"
+                onchange="enableConfirmButton()"
+            >
+
+            <label for="reason5">
+                Other reason
+            </label>
+
+        </div>
+
+
+        <div id="cancelError" class="cancel-error"></div>
+
+
+        <div class="modal-buttons">
+
+            <button
+                type="button"
+                class="modal-cancel-button"
+                onclick="closeCancelModal()"
+            >
+                Close
+            </button>
+
+            <button
+                type="button"
+                id="confirmCancelButton"
+                class="confirm-cancel-button"
+                onclick="confirmCancelOrder()"
+                disabled
+            >
+                Cancel Order
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+const token = localStorage.getItem("token");
+const userId = localStorage.getItem("userId");
+
+
+if (!token || !userId) {
+    window.location.href = "/login.html";
+}
+
+
+
+
+
+function logout() {
+
+    localStorage.removeItem("token");
+    localStorage.removeItem("userId");
+    localStorage.removeItem("userName");
+    localStorage.removeItem("userEmail");
+
+    localStorage.removeItem("selectedOrderId");
+    localStorage.removeItem("selectedOrderAmount");
+
+    window.location.href = "/login.html";
+}
+
+
+
+
+
+function goToPayment(orderId, totalAmount) {
+
+    localStorage.setItem("selectedOrderId", orderId);
+
+    localStorage.setItem(
+        "selectedOrderAmount",
+        totalAmount
+    );
+
+    window.location.href = "/payment.html";
+}
+
+
+
+
+
+async function loadOrders() {
+
+    const container =
+        document.getElementById("ordersContainer");
+
+    try {
+
+        const response = await fetch(
+            "/api/orders/user/" + userId,
+            {
+                method: "GET",
+
+                headers: {
+                    "Authorization": "Bearer " + token
+                }
+            }
+        );
+
+
+        if (response.status === 404) {
+
+            showEmptyOrders();
+
+            return;
+        }
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                "Unable to load orders"
+            );
+        }
+
+
+        const orders = await response.json();
+
+
+        if (!orders || orders.length === 0) {
+
+            showEmptyOrders();
+
+            return;
+        }
+
+
+        displayOrders(orders);
+
+    } catch (error) {
+
+        container.innerHTML = `
+            <div class="error-message">
+                Unable to load your orders.
+            </div>
+        `;
+
+        console.error(error);
+    }
+}
+
+
+
+
+
+function showEmptyOrders() {
+
+    const container =
+        document.getElementById("ordersContainer");
+
+    container.innerHTML = `
+
+        <div class="empty-orders">
+
+            <h2>No Orders Yet 📦</h2>
+
+            <p>
+                You have not placed any orders yet.
+            </p>
+
+            <br>
+
+            <a
+                href="/dashboard.html#restaurants"
+                class="btn btn-primary"
+            >
+                Order Food
+            </a>
+
+        </div>
+
+    `;
+}
+
+
+
+
+
+function displayOrders(orders) {
+
+    const container =
+        document.getElementById("ordersContainer");
+
+    container.innerHTML = "";
+
+
+    orders.forEach(function(order) {
+
+        const card =
+            document.createElement("div");
+
+        card.className = "order-card";
+
+
+        let itemsHTML = "";
+
+
+        if (order.items && order.items.length > 0) {
+
+            order.items.forEach(function(item) {
+
+                const quantity =
+                    item.quantity || 1;
+
+                const price =
+                    item.price || 0;
+
+                const itemTotal =
+                    price * quantity;
+
+
+                itemsHTML += `
+
+                    <div class="order-item">
+
+                        <span>
+                            ${item.foodName || "Food Item"}
+                            × ${quantity}
+                        </span>
+
+                        <span>
+                            ₹${itemTotal.toFixed(2)}
+                        </span>
+
+                    </div>
+
+                `;
+
+            });
+
+        } else {
+
+            itemsHTML = `
+                <p>No items found.</p>
+            `;
+        }
+
+
+        const status =
+            order.status || "PENDING";
+
+        const statusUpper =
+            status.toUpperCase();
+
+
+        let statusClass =
+            "pending-status";
+
+
+        if (
+            statusUpper === "PAID" ||
+            statusUpper === "DELIVERED" ||
+            statusUpper === "COMPLETED"
+        ) {
+
+            statusClass =
+                "paid-status";
+        }
+
+
+        if (statusUpper === "CANCELLED") {
+
+            statusClass =
+                "cancelled-status";
+        }
+
+
+        const totalAmount =
+            order.totalAmount || 0;
+
+
+        const address =
+            order.deliveryAddress;
+
+
+        let deliveryAddress =
+            "N/A";
+
+
+        if (address) {
+
+            deliveryAddress = [
+
+                address.street,
+                address.landmark,
+                address.city,
+                address.state,
+                address.pincode
+
+            ]
+            .filter(value => value)
+            .join(", ");
+        }
+
+
+		
+
+        let actionHTML = "";
+
+
+        
+
+        if (
+            statusUpper === "PAID" ||
+            statusUpper === "DELIVERED" ||
+            statusUpper === "COMPLETED"
+        ) {
+
+            actionHTML = `
+
+                <div class="paid-message">
+                    ✅ Payment Completed
+                </div>
+
+                <button
+                    class="cancel-button"
+                    onclick="openCancelModal('${order.id}')"
+                >
+                    ❌ Cancel Order
+                </button>
+
+            `;
+
+        }
+
+
+        
+
+        else if (statusUpper === "CANCELLED") {
+
+            actionHTML = `
+
+                <div class="cancelled-message">
+                    ❌ Order Cancelled
+                </div>
+
+            `;
+        }
+
+
+        
+
+        else {
+
+            actionHTML = `
+
+                <button
+                    class="btn btn-primary pay-button"
+                    onclick="goToPayment(
+                        '${order.id}',
+                        '${totalAmount}'
+                    )"
+                >
+                    💳 Pay Now
+                </button>
+
+
+                <button
+                    class="cancel-button"
+                    onclick="openCancelModal('${order.id}')"
+                >
+                    ❌ Cancel Order
+                </button>
+
+            `;
+        }
+
+
+        
+		
+
+        let cancelReasonHTML = "";
+
+
+        if (
+            statusUpper === "CANCELLED" &&
+            order.cancelReason
+        ) {
+
+            cancelReasonHTML = `
+
+                <div class="cancel-reason">
+
+                    <strong>
+                        Cancellation Reason:
+                    </strong>
+
+                    ${escapeHTML(order.cancelReason)}
+
+                </div>
+
+            `;
+        }
+
+
+       
+
+        card.innerHTML = `
+
+            <div class="order-header">
+
+                <div class="order-id">
+                    Order ID:
+                    ${order.id || "N/A"}
+                </div>
+
+                <div
+                    class="order-status ${statusClass}"
+                >
+                    ${status}
+                </div>
+
+            </div>
+
+
+            <div class="order-details">
+
+                <p>
+                    <strong>User ID:</strong>
+                    ${order.userId || userId}
+                </p>
+
+                <p>
+                    <strong>Delivery Address:</strong>
+                    ${deliveryAddress}
+                </p>
+
+            </div>
+
+
+            <div class="order-items">
+
+                <h3>Items</h3>
+
+                ${itemsHTML}
+
+            </div>
+
+
+            <div class="order-total">
+
+                Total:
+                ₹${Number(totalAmount).toFixed(2)}
+
+            </div>
+
+
+            ${cancelReasonHTML}
+
+
+            <div class="order-actions">
+
+                ${actionHTML}
+
+            </div>
+
+        `;
+
+
+        container.appendChild(card);
+
+    });
+}
+
+
+
+
+let selectedOrderIdForCancellation = null;
+
+
+
+
+function openCancelModal(orderId) {
+
+    selectedOrderIdForCancellation =
+        orderId;
+
+
+    document
+        .querySelectorAll(
+            'input[name="cancelReason"]'
+        )
+        .forEach(function(radio) {
+
+            radio.checked = false;
+
+        });
+
+
+    document
+        .getElementById("confirmCancelButton")
+        .disabled = true;
+
+
+    document
+        .getElementById("cancelError")
+        .style.display = "none";
+
+
+    document
+        .getElementById("cancelModal")
+        .style.display = "flex";
+}
+
+
+
+
+function closeCancelModal() {
+
+    selectedOrderIdForCancellation =
+        null;
+
+
+    document
+        .getElementById("cancelModal")
+        .style.display = "none";
+}
+
+
+
+
+
+function enableConfirmButton() {
+
+    const selectedReason =
+        document.querySelector(
+            'input[name="cancelReason"]:checked'
+        );
+
+
+    document
+        .getElementById("confirmCancelButton")
+        .disabled = !selectedReason;
+}
+
+
+
+
+async function confirmCancelOrder() {
+
+    if (!selectedOrderIdForCancellation) {
+
+        return;
+    }
+
+
+    const selectedReason =
+        document.querySelector(
+            'input[name="cancelReason"]:checked'
+        );
+
+
+   
+		
+
+    if (!selectedReason) {
+
+        const error =
+            document.getElementById(
+                "cancelError"
+            );
+
+        error.innerText =
+            "Please select a reason before cancelling the order.";
+
+        error.style.display = "block";
+
+        return;
+    }
+
+
+    const reason =
+        selectedReason.value;
+
+
+    const confirmButton =
+        document.getElementById(
+            "confirmCancelButton"
+        );
+
+
+    confirmButton.disabled = true;
+
+    confirmButton.innerText =
+        "Cancelling...";
+
+
+    try {
+
+        const response = await fetch(
+
+            "/api/orders/" +
+            selectedOrderIdForCancellation +
+            "/cancel",
+
+            {
+
+                method: "PUT",
+
+                headers: {
+
+                    "Authorization":
+                        "Bearer " + token,
+
+                    "Content-Type":
+                        "application/json"
+
+                },
+
+                body: JSON.stringify(reason)
+
+            }
+
+        );
+
+
+        const responseText =
+            await response.text();
+
+
+        if (!response.ok) {
+
+            let errorMessage =
+                "Unable to cancel order.";
+
+
+            try {
+
+                const errorData =
+                    JSON.parse(responseText);
+
+
+                if (errorData.message) {
+
+                    errorMessage =
+                        errorData.message;
+
+                }
+
+            } catch (e) {
+
+                if (responseText) {
+
+                    errorMessage =
+                        responseText;
+                }
+            }
+
+
+            throw new Error(
+                errorMessage
+            );
+        }
+
+
+        
+
+        closeCancelModal();
+
+
+        
+
+        await loadOrders();
+
+
+    } catch (error) {
+
+        console.error(
+            "Cancel order error:",
+            error
+        );
+
+
+        const errorElement =
+            document.getElementById(
+                "cancelError"
+            );
+
+
+        errorElement.innerText =
+            error.message ||
+            "Unable to cancel order.";
+
+
+        errorElement.style.display =
+            "block";
+
+
+        confirmButton.disabled =
+            false;
+
+
+        confirmButton.innerText =
+            "Cancel Order";
+    }
+}
+
+
+
+
+
+function escapeHTML(value) {
+
+    if (value === null ||
+        value === undefined) {
+
+        return "";
+    }
+
+
+    return String(value)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+}
+
+
+
+
+
+window.addEventListener(
+    "click",
+    function(event) {
+
+        const modal =
+            document.getElementById(
+                "cancelModal"
+            );
+
+
+        if (event.target === modal) {
+
+            closeCancelModal();
+        }
+
+    }
+);
+
+
+
+
+
+loadOrders();
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Login - FoodExpress</title>
+
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+
+    
+    <header class="navbar">
+
+        <div class="logo">
+            FoodExpress
+        </div>
+
+        <nav class="nav-links">
+            <a href="/">Home</a>
+            <a href="/login.html">Login</a>
+            <a href="/register.html">Register</a>
+        </nav>
+
+    </header>
+
+
+   
+    <section class="hero">
+
+        <div class="hero-content">
+
+            <h1>
+                Welcome <span>Back!</span>
+            </h1>
+
+            <p>
+                Login to your FoodExpress account
+                and continue ordering your favourite food.
+            </p>
+
+            <form id="loginForm">
+
+                <div style="margin-bottom: 15px;">
+
+                    <input
+                        type="email"
+                        id="email"
+                        placeholder="Enter your email"
+                        required
+                        style="width: 320px; padding: 14px; border: 1px solid #ddd; border-radius: 6px; font-size: 16px;"
+                    >
+
+                </div>
+
+
+                <div style="margin-bottom: 20px;">
+
+                    <input
+                        type="password"
+                        id="password"
+                        placeholder="Enter your password"
+                        required
+                        style="width: 320px; padding: 14px; border: 1px solid #ddd; border-radius: 6px; font-size: 16px;"
+                    >
+
+                </div>
+
+
+                <button
+                    type="submit"
+                    class="btn btn-primary"
+                >
+                    Login
+                </button>
+
+            </form>
+
+
+            <p id="message" style="margin-top: 20px;"></p>
+
+
+            <p style="margin-top: 25px;">
+
+                Don't have an account?
+
+                <a href="/register.html">
+                    Register here
+                </a>
+
+            </p>
+
+        </div>
+
+    </section>
+
+
+    
+    <footer class="footer">
+
+        <p>
+            © Delicious FoodExpress. All Rights Reserved.
+        </p>
+
+    </footer>
+
+
+    <script>
+
+        document
+            .getElementById("loginForm")
+            .addEventListener("submit", async function(event) {
+
+                event.preventDefault();
+
+                const email =
+                    document.getElementById("email").value;
+
+                const password =
+                    document.getElementById("password").value;
+
+                const message =
+                    document.getElementById("message");
+
+
+                try {
+
+                    const response = await fetch("/api/auth/login", {
+
+                        method: "POST",
+
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+
+                        body: JSON.stringify({
+                            email: email,
+                            password: password
+                        })
+
+                    });
+
+
+                    const data = await response.json();
+
+
+                    if (response.ok) {
+
+                        localStorage.setItem(
+                            "token",
+                            data.token
+                        );
+
+                        localStorage.setItem(
+                            "userId",
+                            data.userId
+                        );
+
+                        localStorage.setItem(
+                            "userName",
+                            data.name
+                        );
+
+                        localStorage.setItem(
+                            "userEmail",
+                            data.email
+                        );
+
+                        message.innerText =
+                            "Login successful!";
+
+                        message.style.color = "green";
+
+
+                        setTimeout(function() {
+
+                            window.location.href =
+                                "/dashboard.html";
+
+                        }, 1000);
+
+                    } else {
+
+                        message.innerText =
+                            data.message ||
+                            "Invalid email or password";
+
+                        message.style.color = "red";
+
+                    }
+
+                } catch (error) {
+
+                    message.innerText =
+                        "Unable to connect to server.";
+
+                    message.style.color = "red";
+
+                }
+
+            });
+
+    </script>
+
+</body>
+
+</html>

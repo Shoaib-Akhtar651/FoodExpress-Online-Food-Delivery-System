@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Register - FoodExpress</title>
+
+    <link rel="stylesheet" href="/css/style.css">
+
+</head>
+
+<body>
+
+  
+
+    <header class="navbar">
+
+        <div class="logo">
+
+            FoodExpress
+
+        </div>
+
+        <nav class="nav-links">
+
+            <a href="/">Home</a>
+
+            <a href="/login.html">Login</a>
+
+            <a href="/register.html">Register</a>
+
+        </nav>
+
+    </header>
+
+
+
+    
+
+    <section class="hero">
+
+        <div class="hero-content">
+
+            <h1>
+
+                Create Your <span>Account</span>
+
+            </h1>
+
+            <p>
+
+                Register with FoodExpress and start ordering
+
+                your favourite food.
+
+            </p>
+
+
+
+            <form id="registerForm">
+
+                <!-- Name -->
+
+                <div style="margin-bottom: 15px;">
+
+                    <input
+                        type="text"
+                        id="name"
+                        placeholder="Enter your name"
+                        required
+                        minlength="2"
+                        maxlength="50"
+                        style="width: 320px; padding: 14px; border: 1px solid #ddd; border-radius: 6px; font-size: 16px;"
+                    >
+
+                </div>
+
+
+
+             
+
+                <div style="margin-bottom: 15px;">
+
+                    <input
+                        type="email"
+                        id="email"
+                        placeholder="Enter your email"
+                        required
+                        style="width: 320px; padding: 14px; border: 1px solid #ddd; border-radius: 6px; font-size: 16px;"
+                    >
+
+                </div>
+
+
+
+               
+
+                <div style="margin-bottom: 15px;">
+
+                    <input
+                        type="password"
+                        id="password"
+                        placeholder="Enter password"
+                        required
+                        minlength="6"
+                        style="width: 320px; padding: 14px; border: 1px solid #ddd; border-radius: 6px; font-size: 16px;"
+                    >
+
+                </div>
+
+
+
+             
+
+                <div style="margin-bottom: 15px;">
+
+                    <input
+                        type="text"
+                        id="phone"
+                        placeholder="Enter 10-digit phone number"
+                        required
+                        pattern="[0-9]{10}"
+                        maxlength="10"
+                        style="width: 320px; padding: 14px; border: 1px solid #ddd; border-radius: 6px; font-size: 16px;"
+                    >
+
+                </div>
+
+
+
+              
+
+                <div style="margin-bottom: 15px;">
+
+                    <input
+                        type="text"
+                        id="street"
+                        placeholder="Street"
+                        required
+                        style="width: 320px; padding: 14px; border: 1px solid #ddd; border-radius: 6px; font-size: 16px;"
+                    >
+
+                </div>
+
+
+
+               
+
+                <div style="margin-bottom: 15px;">
+
+                    <input
+                        type="text"
+                        id="city"
+                        placeholder="City"
+                        required
+                        style="width: 320px; padding: 14px; border: 1px solid #ddd; border-radius: 6px; font-size: 16px;"
+                    >
+
+                </div>
+
+
+
+            
+
+                <div style="margin-bottom: 15px;">
+
+                    <input
+                        type="text"
+                        id="state"
+                        placeholder="State"
+                        required
+                        style="width: 320px; padding: 14px; border: 1px solid #ddd; border-radius: 6px; font-size: 16px;"
+                    >
+
+                </div>
+
+
+
+              
+
+                <div style="margin-bottom: 15px;">
+
+                    <input
+                        type="text"
+                        id="pincode"
+                        placeholder="Pincode"
+                        required
+                        style="width: 320px; padding: 14px; border: 1px solid #ddd; border-radius: 6px; font-size: 16px;"
+                    >
+
+                </div>
+
+
+
+             
+
+                <div style="margin-bottom: 20px;">
+
+                    <input
+                        type="text"
+                        id="landmark"
+                        placeholder="Landmark"
+                        style="width: 320px; padding: 14px; border: 1px solid #ddd; border-radius: 6px; font-size: 16px;"
+                    >
+
+                </div>
+
+
+
+                <button
+                    type="submit"
+                    class="btn btn-primary"
+                >
+
+                    Create Account
+
+                </button>
+
+            </form>
+
+
+
+            <p id="message" style="margin-top: 20px;"></p>
+
+
+
+            <p
+                style="margin-top: 25px; cursor: pointer;"
+                onclick="window.location.href='/login.html';"
+            >
+
+                Already have an account?
+
+                <a
+                    href="/login.html"
+                    onclick="event.stopPropagation();"
+                >
+
+                    Login here
+
+                </a>
+
+            </p>
+
+        </div>
+
+    </section>
+
+
+
+   
+
+    <footer class="footer">
+
+        <p>
+
+            © Delicious FoodExpress. All Rights Reserved.
+
+        </p>
+
+    </footer>
+
+
+
+    <script>
+
+        document
+            .getElementById("registerForm")
+            .addEventListener("submit", async function(event) {
+
+                event.preventDefault();
+
+                const message =
+                    document.getElementById("message");
+
+
+
+                const userData = {
+
+                    name:
+                        document.getElementById("name").value,
+
+                    email:
+                        document.getElementById("email").value,
+
+                    password:
+                        document.getElementById("password").value,
+
+                    phone:
+                        document.getElementById("phone").value,
+
+                    address: {
+
+                        street:
+                            document.getElementById("street").value,
+
+                        city:
+                            document.getElementById("city").value,
+
+                        state:
+                            document.getElementById("state").value,
+
+                        pincode:
+                            document.getElementById("pincode").value,
+
+                        landmark:
+                            document.getElementById("landmark").value
+
+                    }
+
+                };
+
+
+
+                try {
+
+                    const response = await fetch(
+
+                        "/api/auth/register",
+
+                        {
+
+                            method: "POST",
+
+                            headers: {
+
+                                "Content-Type": "application/json"
+
+                            },
+
+                            body: JSON.stringify(userData)
+
+                        }
+
+                    );
+
+
+
+                    const data = await response.json();
+
+
+
+                    if (response.ok) {
+
+                        message.innerText =
+                            "Registration successful! Redirecting to login...";
+
+                        message.style.color = "green";
+
+
+
+                        setTimeout(function() {
+
+                            window.location.href =
+                                "/login.html";
+
+                        }, 1500);
+
+                    } else {
+
+                        message.innerText =
+                            data.message ||
+                            "Registration failed.";
+
+                        message.style.color = "red";
+
+                    }
+
+
+
+                } catch (error) {
+
+                    message.innerText =
+                        "Unable to connect to server.";
+
+                    message.style.color = "red";
+
+                }
+
+            });
+
+    </script>
+
+</body>
+
+</html>
